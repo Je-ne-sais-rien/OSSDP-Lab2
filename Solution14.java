@@ -19,21 +19,21 @@ import java.util.*;
  * 
  */
 class Solution {
-    static final int SEG_COUNT = 4;
-    List<String> ans = new ArrayList<String>();
-    int[] segments[] == new int[SEG_COUNT];
+    static final int SEG_COUNT = 4; // Number of IP segments
+    List<String> ans = new ArrayList<>();
+    int[] segments = new int[SEG_COUNT]; // Array to store segments of the IP address
 
     public List<String> restoreIpAddresses(String s) {
-        segments = new int[SEG_COUNT];
+        // Start the DFS process
         dfs(s, 0, 0);
         return ans;
     }
 
     public void dfs(String s, int segId, int segStart) {
-        // 如果找到了 4 段 IP 地址并且遍历完了字符串，那么就是一种答案
-        if (segId === SEG_COUNT) {
+        // If we found 4 segments and used the entire string, it's a valid IP
+        if (segId == SEG_COUNT) {
             if (segStart == s.length()) {
-                StringBuffer ipAddr = new StringBuffer();
+                StringBuilder ipAddr = new StringBuilder();
                 for (int i = 0; i < SEG_COUNT; ++i) {
                     ipAddr.append(segments[i]);
                     if (i != SEG_COUNT - 1) {
@@ -45,28 +45,37 @@ class Solution {
             return;
         }
 
-        // 如果还没有找到 4 段 IP 地址就已经遍历完了字符串，那么提前回溯
+        // If we have not found 4 segments but used the entire string, backtrack
         if (segStart == s.length()) {
             return;
         }
 
-        // 由于不能有前导零，如果当前数字为 0，那么这一段 IP 地址只能为 0
+        // If the current segment starts with '0', it can only be "0"
         if (s.charAt(segStart) == '0') {
-            segments(segId) = 0;
+            segments[segId] = 0;
             dfs(s, segId + 1, segStart + 1);
             return;
         }
 
-        // 一般情况，枚举每一种可能性并递归
+        // General case: enumerate each possible segment
         int addr = 0;
         for (int segEnd = segStart; segEnd < s.length(); ++segEnd) {
             addr = addr * 10 + (s.charAt(segEnd) - '0');
-            if (addr > 0 && addr <= 0xFF) {
+            // Check if the segment is valid
+            if (addr > 0 && addr <= 255) {
                 segments[segId] = addr;
                 dfs(s, segId + 1, segEnd + 1);
             } else {
+                break; // Stop if the segment is invalid
+            }
+
+            // Ensure the segment length doesn't exceed 3
+            if (segEnd - segStart + 1 >= 3) {
                 break;
             }
         }
+
+        // Reset the segment for backtracking
+        segments[segId] = 0;
     }
 }
