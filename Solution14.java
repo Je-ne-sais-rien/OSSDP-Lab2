@@ -19,7 +19,7 @@ import java.util.*;
  * 
  */
 class Solution {
-    static final int SEG_COUNT = 4;
+    static final int SEG_COUNT = 4;    // IP address is divided into 4 segments
     List<String> ans = new ArrayList<>();
     int[] segments = new int[SEG_COUNT];
 
