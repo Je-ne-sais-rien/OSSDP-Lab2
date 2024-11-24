@@ -18,19 +18,17 @@ import java.util.*;
  * 输出：["1.0.10.23","1.0.102.3","10.1.0.23","10.10.2.3","101.0.2.3"]
  * 
  */
-class Solution14 {
-    static final int SEG_COUNT = 4; // Number of IP segments
+class Solution {
+    static final int SEG_COUNT = 4;
     List<String> ans = new ArrayList<>();
-    int[] segments = new int[SEG_COUNT]; // Array to store segments of the IP address
+    int[] segments = new int[SEG_COUNT];
 
     public List<String> restoreIpAddresses(String s) {
-        // Start the DFS process
         dfs(s, 0, 0);
         return ans;
     }
 
     public void dfs(String s, int segId, int segStart) {
-        // If we found 4 segments and used the entire string, it's a valid IP
         if (segId == SEG_COUNT) {
             if (segStart == s.length()) {
                 StringBuilder ipAddr = new StringBuilder();
@@ -45,37 +43,31 @@ class Solution14 {
             return;
         }
 
-        // If we have not found 4 segments but used the entire string, backtrack
         if (segStart == s.length()) {
             return;
         }
 
-        // If the current segment starts with '0', it can only be "0"
         if (s.charAt(segStart) == '0') {
             segments[segId] = 0;
             dfs(s, segId + 1, segStart + 1);
             return;
         }
 
-        // General case: enumerate each possible segment
         int addr = 0;
         for (int segEnd = segStart; segEnd < s.length(); ++segEnd) {
             addr = addr * 10 + (s.charAt(segEnd) - '0');
-            // Check if the segment is valid
             if (addr > 0 && addr <= 255) {
                 segments[segId] = addr;
                 dfs(s, segId + 1, segEnd + 1);
             } else {
-                break; // Stop if the segment is invalid
+                break;
             }
 
-            // Ensure the segment length doesn't exceed 3
             if (segEnd - segStart + 1 >= 3) {
                 break;
             }
         }
 
-        // Reset the segment for backtracking
         segments[segId] = 0;
     }
 }
