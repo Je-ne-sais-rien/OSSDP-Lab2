@@ -18,7 +18,7 @@ import java.util.*;
  * 输出：["1.0.10.23","1.0.102.3","10.1.0.23","10.10.2.3","101.0.2.3"]
  * 
  */
-class Solution {
+class Solution14 {
     static final int SEG_COUNT = 4; // Number of IP segments
     List<String> ans = new ArrayList<>();
     int[] segments = new int[SEG_COUNT]; // Array to store segments of the IP address
